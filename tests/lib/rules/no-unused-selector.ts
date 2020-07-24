@@ -657,6 +657,67 @@ tester.run("no-unused-selector", rule as any, {
                 },
             ],
         },
+        // expressions
+        {
+            code: `
+            <template>
+                <div><div :class="{foo: b}"/></div>
+            </template>
+            <style scoped>
+            .foo {}
+            .bar {}
+            </style>
+            <script>
+            export default {
+                data () {
+                    return {
+                        b: true
+                    }
+                }
+            }
+            </script>
+            `,
+            errors: [
+                {
+                    messageId: "unused",
+                    data: { selector: ".bar" },
+                    line: 7,
+                    column: 13,
+                    endLine: 7,
+                    endColumn: 17,
+                },
+            ],
+        },
+        {
+            code: `
+            <template>
+                <div><div :class="[b ? 'foo' : '']"/></div>
+            </template>
+            <style scoped>
+            .foo {}
+            .bar {}
+            </style>
+            <script>
+            export default {
+                data () {
+                    return {
+                        b: true
+                    }
+                }
+            }
+            </script>
+            `,
+            errors: [
+                {
+                    messageId: "unused",
+                    data: { selector: ".bar" },
+                    line: 7,
+                    column: 13,
+                    endLine: 7,
+                    endColumn: 17,
+                },
+            ],
+        },
         // options
         // ignoreBEMModifier
         {
